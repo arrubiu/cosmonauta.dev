@@ -1,0 +1,26 @@
+---
+# Production-only override. The server's existing caddy-docker-proxy reads these labels.
+services:
+  ghost:
+    labels:
+      caddy: www.cosmonauta.dev
+      caddy_ingress_network: caddy
+      # Ghost's hosted ActivityPub service. No self-hosted ActivityPub container is run.
+      caddy.handle_0: /.ghost/activitypub/*
+      caddy.handle_0.reverse_proxy: https://ap.ghost.org
+      caddy.handle_1: /.well-known/webfinger
+      caddy.handle_1.reverse_proxy: https://ap.ghost.org
+      caddy.handle_2: /.well-known/nodeinfo
+      caddy.handle_2.reverse_proxy: https://ap.ghost.org
+      caddy.handle_3: /*
+      caddy.handle_3.reverse_proxy: "{{upstreams 2368}}"
+      # The canonical public URL is www.cosmonauta.dev.
+      caddy_1: cosmonauta.dev
+      caddy_1.redir: https://www.cosmonauta.dev{uri} permanent
+    networks:
+      - ghost
+      - caddy
+
+networks:
+  caddy:
+    external: true

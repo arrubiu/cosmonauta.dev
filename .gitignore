@@ -1,0 +1,12 @@
+# Credentials and per-environment configuration
+.env
+.env.*
+!.env.*.example
+
+# Persistent Docker data (local and production)
+/data/
+
+# Editor and OS metadata
+.DS_Store
+.idea/
+.vscode/

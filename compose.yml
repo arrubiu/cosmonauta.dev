@@ -1,0 +1,45 @@
+---
+# Shared Ghost and MySQL services. Combine this file with exactly one environment override.
+services:
+  ghost:
+    image: ghost:${GHOST_VERSION:-6-alpine}
+    restart: unless-stopped
+    env_file:
+      - ${GHOST_ENV_FILE:-.env}
+    environment:
+      NODE_ENV: production
+      url: https://${DOMAIN:?DOMAIN environment variable is required}
+      database__client: mysql
+      database__connection__host: db
+      database__connection__user: ${DATABASE_USER:-ghost}
+      database__connection__password: ${DATABASE_PASSWORD:?DATABASE_PASSWORD environment variable is required}
+      database__connection__database: ghost
+    volumes:
+      - ${UPLOAD_LOCATION:?UPLOAD_LOCATION environment variable is required}:/var/lib/ghost/content
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ghost
+
+  db:
+    image: mysql:8.0.44@sha256:f37951fc3753a6a22d6c7bf6978c5e5fefcf6f31814d98c582524f98eae52b21
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD:?DATABASE_ROOT_PASSWORD environment variable is required}
+      MYSQL_USER: ${DATABASE_USER:-ghost}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD:?DATABASE_PASSWORD environment variable is required}
+      MYSQL_DATABASE: ghost
+    volumes:
+      - ${MYSQL_DATA_LOCATION:?MYSQL_DATA_LOCATION environment variable is required}:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -p$$MYSQL_ROOT_PASSWORD -h 127.0.0.1
+      interval: 1s
+      start_period: 30s
+      start_interval: 10s
+      retries: 120
+    networks:
+      - ghost
+
+networks:
+  ghost:
