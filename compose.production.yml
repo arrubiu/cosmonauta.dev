@@ -1,7 +1,7 @@
 ---
 # Production-only override. The server's existing caddy-docker-proxy reads these labels.
 services:
-  ghost:
+  cosmonauta_dev_ghost:
     labels:
       caddy: www.cosmonauta.dev
       caddy_ingress_network: caddy
@@ -18,7 +18,7 @@ services:
       caddy_1: cosmonauta.dev
       caddy_1.redir: https://www.cosmonauta.dev{uri} permanent
     networks:
-      - ghost
+      - cosmonauta_dev_ghost
       - caddy
 
 networks:

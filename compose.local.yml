@@ -1,7 +1,7 @@
 ---
 # Local-only override. It deliberately has no Caddy or ActivityPub route.
 services:
-  ghost:
+  cosmonauta_dev_ghost:
     ports:
       - "127.0.0.1:2368:2368"
     environment:

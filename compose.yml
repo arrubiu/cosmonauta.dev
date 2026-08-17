@@ -1,8 +1,11 @@
 ---
 # Shared Ghost and MySQL services. Combine this file with exactly one environment override.
+name: cosmonauta_dev
+
 services:
-  ghost:
-    image: ghost:${GHOST_VERSION:-6-alpine}
+  cosmonauta_dev_ghost:
+    container_name: cosmonauta_dev_ghost
+    image: ghost:${GHOST_VERSION:-6.55.0-alpine}
     restart: unless-stopped
     env_file:
       - ${GHOST_ENV_FILE:-.env}
@@ -10,19 +13,20 @@ services:
       NODE_ENV: production
       url: https://${DOMAIN:?DOMAIN environment variable is required}
       database__client: mysql
-      database__connection__host: db
+      database__connection__host: cosmonauta_dev_db
       database__connection__user: ${DATABASE_USER:-ghost}
       database__connection__password: ${DATABASE_PASSWORD:?DATABASE_PASSWORD environment variable is required}
       database__connection__database: ghost
     volumes:
       - ${UPLOAD_LOCATION:?UPLOAD_LOCATION environment variable is required}:/var/lib/ghost/content
     depends_on:
-      db:
+      cosmonauta_dev_db:
         condition: service_healthy
     networks:
-      - ghost
+      - cosmonauta_dev_ghost
 
-  db:
+  cosmonauta_dev_db:
+    container_name: cosmonauta_dev_db
     image: mysql:8.0.44@sha256:f37951fc3753a6a22d6c7bf6978c5e5fefcf6f31814d98c582524f98eae52b21
     restart: unless-stopped
     environment:
@@ -39,7 +43,8 @@ services:
       start_interval: 10s
       retries: 120
     networks:
-      - ghost
+      - cosmonauta_dev_ghost
 
 networks:
-  ghost:
+  cosmonauta_dev_ghost:
+    name: cosmonauta_dev_ghost
