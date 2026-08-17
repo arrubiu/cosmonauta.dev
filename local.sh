@@ -34,9 +34,11 @@ load_env() {
   require_env
   DATABASE_ROOT_PASSWORD="$(env_value DATABASE_ROOT_PASSWORD)"
   UPLOAD_LOCATION="$(env_value UPLOAD_LOCATION)"
+  MYSQL_DATA_LOCATION="$(env_value MYSQL_DATA_LOCATION)"
   PRODUCTION_SSH="$(env_value PRODUCTION_SSH)"
   : "${DATABASE_ROOT_PASSWORD:?Set DATABASE_ROOT_PASSWORD in $env_file}"
   : "${UPLOAD_LOCATION:?Set UPLOAD_LOCATION in $env_file}"
+  : "${MYSQL_DATA_LOCATION:?Set MYSQL_DATA_LOCATION in $env_file}"
 }
 
 wait_for_db() {
