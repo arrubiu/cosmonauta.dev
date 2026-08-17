@@ -42,8 +42,7 @@ load_env() {
 }
 
 wait_for_db() {
-  local attempt
-  for attempt in {1..60}; do
+  for _ in {1..60}; do
     if "${compose[@]}" exec -T -e MYSQL_PWD="$DATABASE_ROOT_PASSWORD" cosmonauta_dev_db mysqladmin -uroot ping -h 127.0.0.1 --silent; then
       return
     fi
@@ -51,6 +50,13 @@ wait_for_db() {
   done
   echo "MySQL did not become ready in time." >&2
   exit 1
+}
+
+remote_ghost() {
+  local subcommand remote_command
+  subcommand="$1"
+  printf -v remote_command 'cd %q && ./ghost.sh %q' "$production_repository_dir" "$subcommand"
+  ssh "$PRODUCTION_SSH" "$remote_command"
 }
 
 sync_from_production() {
@@ -63,14 +69,14 @@ sync_from_production() {
 
   "${compose[@]}" down
   echo "Synchronizing from ${PRODUCTION_SSH}:${production_repository_dir} (backups: ${production_backup_dir})."
-  remote_upload_path="$(ssh "$PRODUCTION_SSH" "cd '$production_repository_dir' && ./ghost.sh content-path")"
+  remote_upload_path="$(remote_ghost content-path)"
   [[ "$remote_upload_path" = /* ]] || { echo "Production returned an invalid upload path." >&2; exit 1; }
   mkdir -p "${UPLOAD_LOCATION}" "${MYSQL_DATA_LOCATION}"
   rsync -az --delete "${PRODUCTION_SSH}:${remote_upload_path}/" "${UPLOAD_LOCATION}/"
   "${compose[@]}" up -d cosmonauta_dev_db
   wait_for_db
   "${compose[@]}" exec -T -e MYSQL_PWD="$DATABASE_ROOT_PASSWORD" cosmonauta_dev_db mysql -uroot -e 'DROP DATABASE IF EXISTS ghost;'
-  ssh "$PRODUCTION_SSH" "cd '$production_repository_dir' && ./ghost.sh export-db" | "${compose[@]}" exec -T -e MYSQL_PWD="$DATABASE_ROOT_PASSWORD" cosmonauta_dev_db mysql -uroot
+  remote_ghost export-db | "${compose[@]}" exec -T -e MYSQL_PWD="$DATABASE_ROOT_PASSWORD" cosmonauta_dev_db mysql -uroot
   "${compose[@]}" up -d cosmonauta_dev_ghost
   echo "Local Ghost now matches production. It remains local-only."
 }

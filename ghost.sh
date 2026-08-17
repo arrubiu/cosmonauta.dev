@@ -76,7 +76,7 @@ backup() {
   uploads_file="$work_dir/upload.tar.bz2"
   final_file="$backup_dir/backup_${timestamp}.tar.bz2"
   final_tmp="$backup_dir/.backup_${timestamp}.tar.bz2"
-  trap "rm -rf -- $(printf '%q' "$work_dir") $(printf '%q' "$final_tmp")" EXIT
+  trap 'rm -rf -- "$work_dir" "$final_tmp"' EXIT
 
   echo "Creating database dump..."
   "${compose[@]}" exec -T -e MYSQL_PWD="$DATABASE_ROOT_PASSWORD" cosmonauta_dev_db \
