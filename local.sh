@@ -56,6 +56,7 @@ remote_ghost() {
   local subcommand remote_command
   subcommand="$1"
   printf -v remote_command 'cd %q && ./ghost.sh %q' "$production_repository_dir" "$subcommand"
+  # shellcheck disable=SC2029 # The fully quoted remote command is intentionally built on this host.
   ssh "$PRODUCTION_SSH" "$remote_command"
 }
 
