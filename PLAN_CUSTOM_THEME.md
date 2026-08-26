@@ -10,7 +10,7 @@ Il tema Ghost personalizzato vive in `./cosmonauta_theme/`, come repository Git 
 - `origin`: fork Cosmonauta; `upstream`: `TryGhost/Source`.
 - Il repository padre ignora `cosmonauta_theme/`.
 - `main` è distribuito automaticamente in Ghost; le pull request sono validate ma non ricevono i secret di produzione.
-- Il tema viene validato con Node `22.12.0`, pnpm e `pnpm test:ci`.
+- Il tema viene validato con Node `22.13.0`, pnpm e `pnpm test:ci`.
 
 ## Automazione
 
