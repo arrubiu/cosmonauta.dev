@@ -4,6 +4,9 @@ services:
   cosmonauta_dev_ghost:
     ports:
       - "127.0.0.1:2368:2368"
+    volumes:
+      # Local-only live theme source. Production receives themes through GitHub Actions.
+      - ./cosmonauta_theme:/var/lib/ghost/content/themes/cosmonauta
     environment:
       url: http://localhost:2368
       # Local development does not require email-based staff device verification.

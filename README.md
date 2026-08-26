@@ -43,6 +43,26 @@ Then start Ghost:
 ./local.sh up
 ```
 
+### Sviluppo del tema locale
+
+`compose.local.yml` monta `./cosmonauta_theme` direttamente come tema
+`cosmonauta` nell'istanza locale; il mount non esiste in produzione. Per
+sviluppare senza caricare ZIP:
+
+```sh
+./local.sh up
+cd cosmonauta_theme
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Aprire `http://localhost:2368/ghost`, selezionare `cosmonauta` in
+**Settings → Design** e visualizzare il sito su `http://localhost:2368`.
+`pnpm dev` rigenera gli asset CSS e JavaScript. Dopo una modifica ai template
+`.hbs` o a `package.json`, eseguire `./local.sh restart` dalla root del
+repository per far ricaricare il tema a Ghost. Nessuna di queste operazioni
+carica o modifica il tema in produzione.
+
 `./local.sh sync` replaces local uploads and database with a consistent export from production. It requires SSH access configured by `PRODUCTION_SSH`, asks for confirmation, and never uploads local data to production.
 
 ## Production
