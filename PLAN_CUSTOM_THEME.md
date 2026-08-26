@@ -24,9 +24,15 @@ Seguire le release di `TryGhost/Source` tramite GitHub **Watch → Custom → Re
 
 La procedura completa, inclusi i comandi Git, è disponibile nel [README del tema](cosmonauta_theme/README.md).
 
-## Operazioni GitHub/Ghost ancora richieste
+## Stato di implementazione
 
-1. Creare il fork pubblico `arrubiu/cosmonauta_theme` da `TryGhost/Source`.
-2. Effettuare il primo push di `main` locale nel fork e proteggere `main` richiedendo PR e il check `Required checks pass`.
-3. Aggiungere i due secret GitHub nel fork.
-4. Creare l’integrazione Ghost e attivare il tema dopo il primo deploy.
+- Fork pubblico creato: `arrubiu/cosmonauta_theme`, collegato a `TryGhost/Source`.
+- `main` inizializzato da Source `v1.7.2`, con tema rinominato `cosmonauta`.
+- CI GitHub verde su `main`; il ramo richiede pull request e il check `Required checks pass`.
+- Il deploy automatico è configurato, ma non può autenticarsi finché mancano i secret Ghost.
+
+## Azioni residue in Ghost/GitHub
+
+1. In Ghost Admin creare la Custom Integration `GitHub Actions` e copiare API URL e Admin API Key.
+2. Nel fork aggiungere i secret `GHOST_ADMIN_API_URL` e `GHOST_ADMIN_API_KEY`.
+3. Rieseguire il workflow **Deploy Ghost theme** fallito dalla scheda Actions; dopo il successo, attivare `cosmonauta` in Ghost Admin → Design.
