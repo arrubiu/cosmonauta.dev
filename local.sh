@@ -89,7 +89,7 @@ case "${1:-}" in
     case "$1" in
       up) "${compose[@]}" up -d ;;
       down) "${compose[@]}" down ;;
-      restart) "${compose[@]}" restart ;;
+      restart) "${compose[@]}" up -d --force-recreate ;;
       logs) "${compose[@]}" logs -f "${2:-cosmonauta_dev_ghost}" ;;
       status|ps) "${compose[@]}" ps ;;
       pull) "${compose[@]}" pull ;;

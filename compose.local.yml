@@ -6,3 +6,5 @@ services:
       - "127.0.0.1:2368:2368"
     environment:
       url: http://localhost:2368
+      # Local development does not require email-based staff device verification.
+      security__staffDeviceVerification: false
