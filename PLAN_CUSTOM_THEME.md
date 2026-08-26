@@ -29,10 +29,8 @@ La procedura completa, inclusi i comandi Git, è disponibile nel [README del tem
 - Fork pubblico creato: `arrubiu/cosmonauta_theme`, collegato a `TryGhost/Source`.
 - `main` inizializzato da Source `v1.7.2`, con tema rinominato `cosmonauta`.
 - CI GitHub verde su `main`; il ramo richiede pull request e il check `Required checks pass`.
-- Il deploy automatico è configurato, ma non può autenticarsi finché mancano i secret Ghost.
+- Il deploy automatico è configurato e ha completato con successo l’upload verso Ghost.
 
-## Azioni residue in Ghost/GitHub
+## Azione residua in Ghost
 
-1. In Ghost Admin creare la Custom Integration `GitHub Actions` e copiare API URL e Admin API Key.
-2. Nel fork aggiungere i secret `GHOST_ADMIN_API_URL` e `GHOST_ADMIN_API_KEY`.
-3. Rieseguire il workflow **Deploy Ghost theme** fallito dalla scheda Actions; dopo il successo, attivare `cosmonauta` in Ghost Admin → Design.
+Aprire Ghost Admin → Design e attivare `cosmonauta` una sola volta. I deploy successivi da `main` aggiorneranno il tema già attivo.
