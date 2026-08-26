@@ -6,6 +6,9 @@
 # Persistent Docker data (local and production)
 /data/
 
+# This is an independent Git repository with its own origin and upstream.
+/cosmonauta_theme/
+
 # Editor and OS metadata
 .DS_Store
 .idea/
